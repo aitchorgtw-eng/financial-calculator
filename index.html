@@ -51,7 +51,15 @@
                 <label>🍽️ 交通 4.1油資／路邊停車費	4.2大眾運輸／計程車	</label>
                 <input type="number" id="in_others" placeholder="例如：15000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
             </div>
+<div class="input-group">
+                <label>🎨 課程/運動/社團/娛樂 (健身房、才藝課學費)</label>
+                <input type="number" id="in_activities" placeholder="例如：3000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
 
+            <div class="input-group">
+                <label>🚨 智慧照護 (居家保全、緊急求救、跌倒偵測)</label>
+                <input type="number" id="in_smart_care" placeholder="例如：2000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
 
 
         </section>
@@ -164,6 +172,31 @@
                         <span class="val-future free">NT$ 0</span>
                     </div>
                     <div class="badge">交通服務已內含 (Included)</div>
+                </div>
+				<div class="compare-card green-theme">
+                    <h4>課程/運動/社團/娛樂</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_act_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">免費參加 (僅耗材自付)</div>
+                </div>
+
+                <div class="compare-card green-theme">
+                    <h4>智慧照護與安全系統</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_care_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">租金已內含 (Included)</div>
                 </div>
             </div>
 
