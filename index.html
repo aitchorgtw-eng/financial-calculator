@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日昇月好海岸村 | 退休生活財務試算</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="logo">日昇月好海岸村</div>
+        <h1>退休生活財務試算</h1>
+        <p>3分鐘試算，發現「租金內含」的真實價值</p>
+    </header>
+
+    <main class="calculator-container">
+        
+    <section class="step-section" id="step1">
+            <div class="section-title">
+                <span class="step-num">1</span>
+                <h2>您目前的每月居家開銷</h2>
+            </div>
+            
+<div class="input-group">
+                <label>🏠 居住成本 (1.1貸款或房租	1.2大樓管理費與停車費	1.3房屋修繕)</label>
+                <input type="number" id="in_housing" placeholder="例如：25000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
+
+            <div class="input-group">
+                <label>📄 居住成本1.4 房屋稅/地價稅 (請填寫年繳總金額)</label>
+                <input type="number" id="in_tax" placeholder="例如：12000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+                <small style="color: #6b7280; font-size: 0.85rem; margin-top: 4px; display: block;">* 系統將自動除以 12，換算為每月平均開銷</small>
+            </div>
+            <div class="input-group">
+                <label>⚡ 公共事業與通訊費用 (2.1水費	2.2天然氣／瓦斯費	2.3垃圾清運費)</label>
+                <input type="number" id="in_utilities" placeholder="例如：3500" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
+
+<div class="input-group">
+    <label>💡 居家電費 (夏季/非夏季平均)</label>
+    <input type="number" id="in_electricity" placeholder="例如：1500" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+</div>
+
+            <div class="input-group">
+                <label>🧹 居家清潔/家事服務</label>
+                <input type="number" id="in_cleaning" placeholder="例如：2000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
+
+            <div class="input-group">
+                <label>🍽️ 交通 4.1油資／路邊停車費	4.2大眾運輸／計程車	</label>
+                <input type="number" id="in_others" placeholder="例如：15000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
+
+
+
+        </section>
+
+        <section class="step-section" id="step2">
+            <div class="section-title">
+                <span class="step-num">2</span>
+                <h2>選擇未來理想房型</h2>
+            </div>
+            
+            <div class="room-selector">
+                <label class="room-card">
+                    <input type="radio" name="room" value="34500" checked>
+                    <div class="card-content">
+                        <h3>經濟舒適房</h3>
+                        <p class="price">約 NT$34,500 /月</p>
+                        <ul class="features">
+                            <li>適合極簡生活</li>
+                            <li>包含完整公設使用權</li>
+                        </ul>
+                    </div>
+                </label>
+
+                <label class="room-card">
+                    <input type="radio" name="room" value="46000">
+                    <div class="card-content">
+                        <h3>經典一房一廳</h3>
+                        <p class="price">約 NT$46,000 /月</p>
+                        <ul class="features">
+                            <li>獨立臥室與客廳</li>
+                            <li>最受歡迎選擇</li>
+                        </ul>
+                    </div>
+                </label>
+            </div>
+
+            <div class="extras">
+                <label><input type="checkbox" id="check_partner" value="8000"> 配偶同住 (+8,000)</label>
+                <label><input type="checkbox" id="check_care" value="5000"> 需外籍看護同住 (+5,000)</label>
+            </div>
+        </section>
+
+        <section class="result-section" id="report-area">
+            <div class="section-title">
+                <span class="step-num">3</span>
+                <h2>費用對照表</h2>
+            </div>
+
+  <div class="comparison-grid">
+                <div class="compare-card">
+                    <h4>居住與設施</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_housing_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future" id="out_housing_fut">-</span>
+                    </div>
+                    <div class="note">含租金、稅金、修繕、管理</div>
+                </div>
+
+                <div class="compare-card green-theme">
+                    <h4>水費、保全與網路</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_util_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">租金已內含 (Included)</div>
+                </div>
+
+                <div class="compare-card green-theme">
+                    <h4>居家清潔 (每月一次)</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_clean_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">免費服務 (Included)</div>
+                </div>
+
+                <div class="compare-card">
+                    <h4>居家電費 (依錶計費)</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_elec_cur">-</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future" id="out_elec_fut">-</span>
+                    </div>
+                    <div class="note">皆為個人自付 (依實際用量)</div>
+                </div>
+
+                <div class="compare-card green-theme">
+                    <h4>交通 (油資/稅金/大眾運輸)</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_traffic_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">交通服務已內含 (Included)</div>
+                </div>
+            </div>
+
+            <div class="final-summary">
+                <div class="summary-row">
+                    <span>目前總開銷：</span>
+                    <span id="total_current">NT$ 0</span>
+                </div>
+                <div class="summary-row future">
+                    <span>入住後月費：</span>
+                    <span id="total_future">NT$ 0</span>
+                </div>
+                <div class="diff-box" id="diff_box">
+                    差額計算中...
+                </div>
+            </div>
+
+            <details class="capital-details">
+                <summary>查看一次性資金準備 (信託與保證金)</summary>
+                <div class="capital-content">
+                    <p>信託金額 (5年)：<span id="val_trust">-</span></p>
+                    <p>保證金 (6個月)：<span id="val_deposit">-</span></p>
+                    <small>*此為預估值，實際依合約為主</small>
+                </div>
+            </details>
+
+        </section>
+
+        <div class="action-area">
+            <button class="btn-primary" onclick="generateImage()">下載試算報告 (圖片版)</button>
+            <p class="disclaimer">本試算結果僅供參考，實際費用以正式報價單為準。</p>
+        </div>
+
+    </main>
+<script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

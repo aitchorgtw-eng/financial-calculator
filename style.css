@@ -1,0 +1,188 @@
+:root {
+    --primary: #1e3a8a;
+    --accent: #f97316;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --gray-light: #f3f4f6;
+    --text-main: #1f2937;
+}
+
+body {
+    font-family: "Noto Sans TC", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9fafb;
+    color: var(--text-main);
+    line-height: 1.5;
+}
+
+/* Header */
+.site-header {
+    background: var(--primary);
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.calculator-container {
+    max-width: 800px; /* 桌機版最大寬度 */
+    margin: -20px auto 40px;
+    padding: 0 16px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Sections */
+.step-section, .result-section {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--gray-light);
+    padding-bottom: 10px;
+}
+
+.step-num {
+    background: var(--accent);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+h2 { font-size: 1.25rem; margin: 0; }
+
+/* Inputs */
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; font-size: 0.9rem; color: #4b5563; margin-bottom: 5px; }
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box; /* 確保 padding 不會撐大寬度 */
+}
+
+/* Room Selector (Cards) */
+.room-selector {
+    display: flex;
+    flex-direction: column; /* 手機版垂直堆疊 */
+    gap: 12px;
+}
+
+.room-card {
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+}
+
+.room-card:has(input:checked) {
+    border-color: var(--primary);
+    background-color: #eff6ff;
+}
+
+.card-content { margin-left: 10px; }
+.card-content h3 { margin: 0 0 5px 0; font-size: 1.1rem; }
+.price { color: var(--accent); font-weight: bold; margin: 0; }
+.features { font-size: 0.85rem; color: #6b7280; padding-left: 20px; margin: 5px 0 0 0; }
+
+/* Comparison Matrix (Grid) */
+.comparison-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.compare-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.compare-card.green-theme {
+    background-color: var(--green-bg);
+    border-color: var(--green);
+}
+
+.compare-card h4 { margin: 0 0 10px 0; font-size: 1rem; }
+
+.compare-card .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.val-current { text-decoration: line-through; color: #9ca3af; }
+.val-future { font-weight: bold; }
+.val-future.free { color: var(--green); font-size: 1.1rem; }
+
+.badge {
+    display: inline-block;
+    background: var(--green);
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+/* Summary Box */
+.final-summary {
+    background: #1f2937;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.diff-box {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #374151;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+/* Desktop Styles */
+@media (min-width: 768px) {
+    .room-selector {
+        flex-direction: row; /* 桌機版橫向排列 */
+    }
+    .room-card { flex: 1; }
+    
+    .comparison-grid {
+        grid-template-columns: repeat(3, 1fr); /* 桌機版三欄 */
+    }
+}
+/* style.css */
+
+/* 確保這個區塊有白色背景，不然截圖出來可能會變透明或變黑 */
+.result-section {
+    background: white; 
+    /* ...其他原本的樣式... */
+}
