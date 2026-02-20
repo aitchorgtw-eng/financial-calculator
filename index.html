@@ -1,238 +1,513 @@
 <!DOCTYPE html>
-<html lang="zh-Hant-TW">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>日昇月好海岸村 | 退休生活財務試算</title>
-    <link rel="stylesheet" href="style.css">
+    <title>東基醫療財團法人台東基督教醫院 ISO 27001:2022 轉版戰略指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5, #D946EF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .step-number {
+            background: linear-gradient(135deg, #4F46E5, #06B6D4);
+        }
+    </style>
+    <!-- 
+        Palette: Future Tech & Security
+        Primary: #4F46E5 (Indigo)
+        Secondary: #06B6D4 (Cyan)
+        Accent: #D946EF (Fuchsia)
+        
+        Narrative Plan Summary:
+        1. Intro/Deadline -> 2. Structural Changes (Bar/Donut) -> 3. Tech Deep Dive (Radar) -> 4. Audit Impact (Stacked Bar) -> 5. Action Plan (Steps) -> 6. Timeline (Gantt)
+        
+        NO SVG USED. NO MERMAID JS USED.
+    -->
 </head>
-<body>
+<body class="antialiased">
 
-    <header class="site-header">
-        <div class="logo">日昇月好海岸村</div>
-        <h1>退休生活財務試算</h1>
-        <p>3分鐘試算，發現「租金內含」的真實價值</p>
+    <!-- Navigation / Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-slate-800">ISO 27001:2022 <span class="text-indigo-600">轉版戰略指南</span></h1>
+            <div class="text-sm font-medium text-slate-500">截止日期: 2026/10</div>
+        </div>
     </header>
 
-    <main class="calculator-container">
-        
-    <section class="step-section" id="step1">
-            <div class="section-title">
-                <span class="step-num">1</span>
-                <h2>您目前的每月居家開銷</h2>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+
+        <!-- Hero Section -->
+        <section class="text-center space-y-6 mb-16">
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">
+                東基醫療財團法人台東基督教醫院 <span class="gradient-text">從合規到數位韌性</span>
+            </h2>
+            <p class="max-w-3xl mx-auto text-lg text-slate-600">
+                2013 年版標準已無法應對現代雲端與分散式辦公風險。面對 2026 年 10 月的硬性轉版期限，企業不僅需要更新證書，更需透過 ISO/IEC 27006-1 新制稽核，重建供應鏈信任。
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div class="bg-indigo-50 p-6 rounded-lg border border-indigo-100">
+                    <div class="text-indigo-600 text-3xl font-bold mb-2">2025/10</div>
+                    <div class="text-slate-700 font-medium">舊版證書失效日</div>
+                </div>
+                <div class="bg-cyan-50 p-6 rounded-lg border border-cyan-100">
+                    <div class="text-cyan-600 text-3xl font-bold mb-2">93 項</div>
+                    <div class="text-slate-700 font-medium">新版控制項 (原 114)</div>
+                </div>
+                <div class="bg-fuchsia-50 p-6 rounded-lg border border-fuchsia-100">
+                    <div class="text-fuchsia-600 text-3xl font-bold mb-2">11 項</div>
+                    <div class="text-slate-700 font-medium">全新核心控制項</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Structural Changes -->
+        <section>
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-slate-800 border-l-4 border-indigo-600 pl-4">結構重組：化繁為簡</h3>
+                <p class="mt-2 text-slate-600">
+                    ISO 27001:2022 將附錄 A 從 14 個領域精簡為 4 大主題。這不僅是分類的改變，更反映了資安治理的現代化思維，將權責更清晰地劃分為組織、人員、實體與技術。
+                </p>
             </div>
             
-<div class="input-group">
-                <label>🏠 居住成本 (1.1貸款或房租	1.2大樓管理費與停車費	1.3房屋修繕)</label>
-                <input type="number" id="in_housing" placeholder="例如：25000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Viz 1: Control Count Comparison -->
+                <div class="card">
+                    <h4 class="text-lg font-semibold mb-4 text-center">控制項數量演變 (2013 vs 2022)</h4>
+                    <div class="chart-container">
+                        <canvas id="controlCountChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-500 text-center">
+                        雖然總數減少，但控制項的內涵更深，許多舊項目被合併以符合現代管理邏輯。
+                    </p>
+                </div>
 
-            <div class="input-group">
-                <label>📄 居住成本1.4 房屋稅/地價稅 (請填寫年繳總金額)</label>
-                <input type="number" id="in_tax" placeholder="例如：12000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
-                <small style="color: #6b7280; font-size: 0.85rem; margin-top: 4px; display: block;">* 系統將自動除以 12，換算為每月平均開銷</small>
+                <!-- Viz 2: The 4 Themes Distribution -->
+                <div class="card">
+                    <h4 class="text-lg font-semibold mb-4 text-center">2022 新版四大主題分佈</h4>
+                    <div class="chart-container">
+                        <canvas id="themesChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-500 text-center">
+                        「技術控制」與「組織控制」佔據了絕大比例，顯示新版標準極度重視技術實作與管理制度的結合。
+                    </p>
+                </div>
             </div>
-            <div class="input-group">
-                <label>⚡ 公共事業與通訊費用 (2.1水費	2.2天然氣／瓦斯費	2.3垃圾清運費)</label>
-                <input type="number" id="in_utilities" placeholder="例如：3500" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
-            </div>
-
-<div class="input-group">
-    <label>💡 居家電費 (夏季/非夏季平均)</label>
-    <input type="number" id="in_electricity" placeholder="例如：1500" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
-</div>
-
-            <div class="input-group">
-                <label>🧹 居家清潔/家事服務</label>
-                <input type="number" id="in_cleaning" placeholder="例如：2000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
-            </div>
-
-            <div class="input-group">
-                <label>🍽️ 交通 4.1油資／路邊停車費	4.2大眾運輸／計程車	</label>
-                <input type="number" id="in_others" placeholder="例如：15000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
-            </div>
-<div class="input-group">
-                <label>🎨 課程/運動/社團/娛樂 (健身房、才藝課學費)</label>
-                <input type="number" id="in_activities" placeholder="例如：3000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
-            </div>
-
-            <div class="input-group">
-                <label>🚨 智慧照護 (居家保全、緊急求救、跌倒偵測)</label>
-                <input type="number" id="in_smart_care" placeholder="例如：2000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
-            </div>
-
-
         </section>
 
-        <section class="step-section" id="step2">
-            <div class="section-title">
-                <span class="step-num">2</span>
-                <h2>選擇未來理想房型</h2>
+        <!-- Section 2: Technical Deep Dive -->
+        <section>
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-slate-800 border-l-4 border-cyan-500 pl-4">技術升級：11 項關鍵新增 重點是稽核師會到各部門查看</h3>
+                <p class="mt-2 text-slate-600">
+                    在新增的 11 項控制項中，有 5 項是現代資安防禦的「重中之重」。企業必須在這些領域展示實質的技術證據，而非僅僅是書面政策。
+                </p>
             </div>
-            
-            <div class="room-selector">
-                <label class="room-card">
-                    <input type="radio" name="room" value="34500" checked>
-                    <div class="card-content">
-                        <h3>經濟舒適房</h3>
-                        <p class="price">約 NT$34,500 /月</p>
-                        <ul class="features">
-                            <li>適合極簡生活</li>
-                            <li>包含完整公設使用權</li>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Viz 3: Radar Chart for Key Controls -->
+                <div class="card lg:col-span-2">
+                    <h4 class="text-lg font-semibold mb-4 text-center">關鍵新增控制項：實作優先度評估</h4>
+                    <div class="chart-container">
+                        <canvas id="newControlsRadar"></canvas>
+                    </div>
+                    <div class="mt-4 grid grid-cols-2 gap-4 text-sm text-slate-600">
+                        <div class="flex items-start"><span class="text-indigo-600 mr-2">●</span> 威脅情報 (Threat Intel): 需建立收集與分析程序。</div>
+                        <div class="flex items-start"><span class="text-indigo-600 mr-2">●</span> 資料遮罩 (Masking): PII 去識別化是稽核重點。</div>
+                        <div class="flex items-start"><span class="text-indigo-600 mr-2">●</span> DLP: 監控資料流向，防止外洩。</div>
+                        <div class="flex items-start"><span class="text-indigo-600 mr-2">●</span> 雲端資安: 需釐清共用責任模型。</div>
+                    </div>
+                </div>
+
+                <!-- Descriptive List for Context -->
+                <div class="card flex flex-col justify-center space-y-6">
+                    <div>
+                        <h5 class="font-bold text-indigo-600 text-lg">為什麼這些很重要？</h5>
+                        <p class="text-slate-600 mt-1">
+                            稽核師將重點檢查這些項目。若缺乏如 DLP log 或威脅情資報告等數位足跡，將直接導致缺失 (Non-conformity)。
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-fuchsia-500">
+                        <strong class="block text-slate-800">實作建議 (Must-Haves):</strong>
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm text-slate-600">
+                            <li>部署 DLP 工具進行端點監控</li>
+                            <li>訂閱外部威脅情資來源</li>
+                            <li>實施資料庫動態遮罩</li>
+                            <li>建立雲端組態自動化掃描</li>
                         </ul>
                     </div>
-                </label>
-
-                <label class="room-card">
-                    <input type="radio" name="room" value="46000">
-                    <div class="card-content">
-                        <h3>經典一房一廳</h3>
-                        <p class="price">約 NT$46,000 /月</p>
-                        <ul class="features">
-                            <li>獨立臥室與客廳</li>
-                            <li>最受歡迎選擇</li>
-                        </ul>
-                    </div>
-                </label>
-            </div>
-
-            <div class="extras">
-                <label><input type="checkbox" id="check_partner" value="8000"> 配偶同住 (+8,000)</label>
-                <label><input type="checkbox" id="check_care" value="5000"> 需外籍看護同住 (+5,000)</label>
+                </div>
             </div>
         </section>
 
-        <section class="result-section" id="report-area">
-            <div class="section-title">
-                <span class="step-num">3</span>
-                <h2>費用對照表</h2>
+        <!-- Section 3: Audit Impact -->
+        <section>
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-slate-800 border-l-4 border-fuchsia-500 pl-4">ISO/IEC 27006-1:2024 稽核衝擊</h3>
+                <p class="mt-2 text-slate-600">
+                    隨著 ISO 27006-1:2024 的更新，驗證機構 (CB) 的稽核標準變得更為嚴格。文件審查的比例下降，取而代之的是對系統設定、日誌 (Log) 與實際操作的技術驗證。
+                </p>
             </div>
 
-  <div class="comparison-grid">
-                <div class="compare-card">
-                    <h4>居住與設施</h4>
-                    <div class="row">
-                        <span class="label">目前居家</span>
-                        <span class="val-current" id="out_housing_cur">-</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="card">
+                    <h4 class="text-lg font-semibold mb-4 text-center">稽核重心轉移：文件 vs 技術實證</h4>
+                    <div class="chart-container">
+                        <canvas id="auditShiftChart"></canvas>
                     </div>
-                    <div class="row highlight">
-                        <span class="label">日昇月好</span>
-                        <span class="val-future" id="out_housing_fut">-</span>
-                    </div>
-                    <div class="note">含租金、稅金、修繕、管理</div>
+                    <p class="mt-4 text-sm text-slate-500 text-center">
+                        未來稽核中，「做給稽核師看」的比例大幅提升。單純的紙本政策將無法通過驗證。所以稽核師會到各部門查看。
+                    </p>
                 </div>
-
-                <div class="compare-card green-theme">
-                    <h4>水費、保全與網路</h4>
-                    <div class="row">
-                        <span class="label">目前居家</span>
-                        <span class="val-current" id="out_util_cur">-</span>
+                <div class="space-y-4">
+                    <div class="flex items-start p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                        <div class="text-3xl mr-4">⏱️</div>
+                        <div>
+                            <h5 class="font-bold text-slate-800">人天計算更嚴格</h5>
+                            <p class="text-sm text-slate-600">組織若涉及多據點或複雜技術架構，稽核工時 (Audit Days) 可能顯著增加。</p>
+                        </div>
                     </div>
-                    <div class="row highlight">
-                        <span class="label">日昇月好</span>
-                        <span class="val-future free">NT$ 0</span>
+                    <div class="flex items-start p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                        <div class="text-3xl mr-4">🔍</div>
+                        <div>
+                            <h5 class="font-bold text-slate-800">技術實證優先</h5>
+                            <p class="text-sm text-slate-600">稽核師將直接要求查看防火牆規則、DLP 告警紀錄與雲端平台設定。</p>
+                        </div>
                     </div>
-                    <div class="badge">租金已內含 (Included)</div>
-                </div>
-
-                <div class="compare-card green-theme">
-                    <h4>居家清潔 (每月一次)</h4>
-                    <div class="row">
-                        <span class="label">目前居家</span>
-                        <span class="val-current" id="out_clean_cur">-</span>
+                    <div class="flex items-start p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                        <div class="text-3xl mr-4">💻</div>
+                        <div>
+                            <h5 class="font-bold text-slate-800">遠端取證門檻</h5>
+                            <p class="text-sm text-slate-600">遠端稽核需準備安全的展示環境 (如加密的 Teams/Zoom 頻道) 以保護證據。</p>
+                        </div>
                     </div>
-                    <div class="row highlight">
-                        <span class="label">日昇月好</span>
-                        <span class="val-future free">NT$ 0</span>
-                    </div>
-                    <div class="badge">免費服務 (Included)</div>
-                </div>
-
-                <div class="compare-card">
-                    <h4>居家電費 (依錶計費)</h4>
-                    <div class="row">
-                        <span class="label">目前居家</span>
-                        <span class="val-current" id="out_elec_cur">-</span>
-                    </div>
-                    <div class="row">
-                        <span class="label">日昇月好</span>
-                        <span class="val-future" id="out_elec_fut">-</span>
-                    </div>
-                    <div class="note">皆為個人自付 (依實際用量)</div>
-                </div>
-
-                <div class="compare-card green-theme">
-                    <h4>交通 (油資/稅金/大眾運輸)</h4>
-                    <div class="row">
-                        <span class="label">目前居家</span>
-                        <span class="val-current" id="out_traffic_cur">-</span>
-                    </div>
-                    <div class="row highlight">
-                        <span class="label">日昇月好</span>
-                        <span class="val-future free">NT$ 0</span>
-                    </div>
-                    <div class="badge">交通服務已內含 (Included)</div>
-                </div>
-				<div class="compare-card green-theme">
-                    <h4>課程/運動/社團/娛樂</h4>
-                    <div class="row">
-                        <span class="label">目前居家</span>
-                        <span class="val-current" id="out_act_cur">-</span>
-                    </div>
-                    <div class="row highlight">
-                        <span class="label">日昇月好</span>
-                        <span class="val-future free">NT$ 0</span>
-                    </div>
-                    <div class="badge">免費參加 (僅耗材自付)</div>
-                </div>
-
-                <div class="compare-card green-theme">
-                    <h4>智慧照護與安全系統</h4>
-                    <div class="row">
-                        <span class="label">目前居家</span>
-                        <span class="val-current" id="out_care_cur">-</span>
-                    </div>
-                    <div class="row highlight">
-                        <span class="label">日昇月好</span>
-                        <span class="val-future free">NT$ 0</span>
-                    </div>
-                    <div class="badge">租金已內含 (Included)</div>
                 </div>
             </div>
-
-            <div class="final-summary">
-                <div class="summary-row">
-                    <span>目前總開銷：</span>
-                    <span id="total_current">NT$ 0</span>
-                </div>
-                <div class="summary-row future">
-                    <span>入住後月費：</span>
-                    <span id="total_future">NT$ 0</span>
-                </div>
-                <div class="diff-box" id="diff_box">
-                    差額計算中...
-                </div>
-            </div>
-
-            <details class="capital-details">
-                <summary>查看一次性資金準備 (信託與保證金)</summary>
-                <div class="capital-content">
-                    <p>信託金額 (5年)：<span id="val_trust">-</span></p>
-                    <p>保證金 (6個月)：<span id="val_deposit">-</span></p>
-                    <small>*此為預估值，實際依合約為主</small>
-                </div>
-            </details>
-
         </section>
 
-        <div class="action-area">
-            <button class="btn-primary" onclick="generateImage()">下載試算報告 (圖片版)</button>
-            <p class="disclaimer">本試算結果僅供參考，實際費用以正式報價單為準。</p>
-        </div>
+        <!-- Section 4: Roadmap & Action Plan -->
+        <section>
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-slate-800 border-l-4 border-indigo-600 pl-4">轉版行動藍圖 (Roadmap)</h3>
+                <p class="mt-2 text-slate-600">
+                    採用「回溯排程法」，從 2026 年 10 月失效日往前推算。擬於 2026 年 Q1 完成內審，Q2 進行正式稽核，預留充足的缺失改善時間。目前爭取到2026/10/31前完成轉版。
+                </p>
+            </div>
+
+            <div class="card mb-12">
+                <h4 class="text-lg font-semibold mb-6 text-center">2025-2026 關鍵里程碑時程表</h4>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="roadmapChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Action Steps -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-indigo-500">
+                    <div class="font-bold text-lg text-indigo-600 mb-2">Step 1</div>
+                    <h5 class="font-bold text-slate-800 mb-1">差異分析</h5>
+                    <p class="text-xs text-slate-600">比對舊版 SoA 與新版附錄 A，找出缺口。</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-indigo-500">
+                    <div class="font-bold text-lg text-indigo-600 mb-2">Step 2</div>
+                    <h5 class="font-bold text-slate-800 mb-1">SoA 重構</h5>
+                    <p class="text-xs text-slate-600">產出新版適用性聲明書，加入屬性標籤。</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-indigo-500">
+                    <div class="font-bold text-lg text-indigo-600 mb-2">Step 3</div>
+                    <h5 class="font-bold text-slate-800 mb-1">工具佈署</h5>
+                    <p class="text-xs text-slate-600">落實 DLP、威脅情報等 11 項新技術控制。</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-indigo-500">
+                    <div class="font-bold text-lg text-indigo-600 mb-2">Step 4</div>
+                    <h5 class="font-bold text-slate-800 mb-1">內審演練</h5>
+                    <p class="text-xs text-slate-600">模擬新制稽核，檢查數位證據完整性。</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-indigo-500">
+                    <div class="font-bold text-lg text-indigo-600 mb-2">Step 5</div>
+                    <h5 class="font-bold text-slate-800 mb-1">正式稽核</h5>
+                    <p class="text-xs text-slate-600">2025 Q1 申請，預留 Q2/Q3 進行改善。</p>
+                </div>
+            </div>
+        </section>
 
     </main>
-<script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.js"></script>
-<script src="script.js"></script>
 
+    <footer class="bg-slate-800 text-slate-400 py-8 text-center text-sm">
+        <p>&copy; 2025 資安治理轉版策略小組. 依據 ISO 27001:2022 與 ISO/IEC 27006-1 標準製作。</p>
+    </footer>
+
+    <script>
+        // --- Utility: Label Wrapping (16 chars) ---
+        function wrapLabel(label) {
+            if (typeof label !== 'string' || label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length <= 16) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- Shared Chart Config ---
+        Chart.defaults.font.family = "'Noto Sans TC', sans-serif";
+        Chart.defaults.color = '#64748B';
+        
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- Viz 1: 2013 vs 2022 Comparison (Bar) ---
+        const ctxControlCount = document.getElementById('controlCountChart').getContext('2d');
+        new Chart(ctxControlCount, {
+            type: 'bar',
+            data: {
+                labels: ['2013 舊版', '2022 新版'],
+                datasets: [{
+                    label: '控制項數量 (Controls)',
+                    data: [114, 93],
+                    backgroundColor: ['#94A3B8', '#4F46E5'],
+                    borderRadius: 6
+                }, {
+                    label: '領域/主題數量 (Domains/Themes)',
+                    data: [14, 4],
+                    backgroundColor: ['#CBD5E1', '#06B6D4'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: tooltipConfig,
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // --- Viz 2: 4 Themes Distribution (Doughnut) ---
+        const themesLabels = ['組織控制 (Organizational)', '人員控制 (People)', '實體控制 (Physical)', '技術控制 (Technological)'];
+        const processedThemesLabels = themesLabels.map(wrapLabel);
+
+        const ctxThemes = document.getElementById('themesChart').getContext('2d');
+        new Chart(ctxThemes, {
+            type: 'doughnut',
+            data: {
+                labels: processedThemesLabels,
+                datasets: [{
+                    data: [37, 8, 14, 34],
+                    backgroundColor: ['#4F46E5', '#D946EF', '#64748B', '#06B6D4'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: tooltipConfig,
+                    legend: { position: 'right', labels: { boxWidth: 15 } }
+                }
+            }
+        });
+
+        // --- Viz 3: New Controls Priority (Radar) ---
+        const radarLabels = ['威脅情報 (Threat Intel)', '資料遮罩 (Masking)', 'DLP 防外洩', '雲端資安 (Cloud)', '組態管理 (Config)'];
+        const processedRadarLabels = radarLabels.map(wrapLabel);
+
+        const ctxRadar = document.getElementById('newControlsRadar').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: processedRadarLabels,
+                datasets: [{
+                    label: '實作複雜度 (Complexity)',
+                    data: [3, 4, 5, 4, 3],
+                    fill: true,
+                    backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                    borderColor: '#4F46E5',
+                    pointBackgroundColor: '#4F46E5',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#4F46E5'
+                }, {
+                    label: '稽核關注度 (Audit Focus)',
+                    data: [5, 4, 5, 5, 4],
+                    fill: true,
+                    backgroundColor: 'rgba(217, 70, 239, 0.2)',
+                    borderColor: '#D946EF',
+                    pointBackgroundColor: '#D946EF',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#D946EF'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { display: true },
+                        suggestedMin: 0,
+                        suggestedMax: 5,
+                        ticks: { display: false }
+                    }
+                },
+                plugins: {
+                    tooltip: tooltipConfig,
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // --- Viz 4: Audit Shift (Stacked Bar) ---
+        const ctxAudit = document.getElementById('auditShiftChart').getContext('2d');
+        new Chart(ctxAudit, {
+            type: 'bar',
+            data: {
+                labels: ['過去稽核慣例', '新版 ISO 27006-1'],
+                datasets: [{
+                    label: '文件審查 (Policies)',
+                    data: [70, 40],
+                    backgroundColor: '#CBD5E1'
+                }, {
+                    label: '技術實證 (Evidence/Logs)',
+                    data: [30, 60],
+                    backgroundColor: '#D946EF'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: { stacked: true, max: 100 },
+                    y: { stacked: true }
+                },
+                plugins: {
+                    tooltip: tooltipConfig,
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // --- Viz 5: Roadmap (Horizontal Floating Bar) ---
+        const ctxRoadmap = document.getElementById('roadmapChart').getContext('2d');
+        // Data format: [Start Quarter Index, End Quarter Index]
+        // Q3'24=0, Q4'24=1, Q1'25=2, Q2'25=3, Q3'25=4, Q4'25=5
+        
+        new Chart(ctxRoadmap, {
+            type: 'bar',
+            data: {
+                labels: ['文件修訂與分析', '技術佈署 (DLP/雲端)', '內部稽核 (Internal)', '正式外部稽核', '證書取得'],
+                datasets: [{
+                    label: '執行期間',
+                    data: [
+                        [0, 2], // Q3'25 - Q4'25
+                        [1, 3], // Q4'25 - Q1'25
+                        [2, 3], // Q1'26
+                        [3, 5], // Q2'26 - Q3'26
+                        [5, 5.5] // Q3'26 End
+                    ],
+                    backgroundColor: [
+                        '#94A3B8', 
+                        '#06B6D4', 
+                        '#4F46E5', 
+                        '#D946EF', 
+                        '#10B981'
+                    ],
+                    barPercentage: 0.6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 6,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function(value, index, values) {
+                                const labels = ['Q3 2025', 'Q4 2025', 'Q1 2026', 'Q2 2026', 'Q3 2026', 'Q4 2026', 'End'];
+                                return labels[value];
+                            }
+                        },
+                        grid: { color: '#E2E8F0' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) { return context[0].label; },
+                            label: function(context) {
+                                const labels = ['Q3 2025', 'Q4 2025', 'Q1 2026', 'Q2 2026', 'Q3 2026', 'Q4 2026', 'End'];
+                                const start = labels[context.raw[0]];
+                                const end = labels[Math.floor(context.raw[1])] || 'End';
+                                return `${start} - ${end}`;
+                            }
+                        }
+                    },
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
