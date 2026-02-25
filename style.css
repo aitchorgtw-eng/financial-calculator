@@ -1,72 +1,286 @@
+:root {
+    --primary: #1e3a8a;
+    --accent: #f97316;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --gray-light: #f3f4f6;
+    --text-main: #1f2937;
+}
+
+body {
+    font-family: "Noto Sans TC", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9fafb;
+    color: var(--text-main);
+    line-height: 1.5;
+}
+
+/* Header */
+.site-header {
+    background: var(--primary);
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.calculator-container {
+    max-width: 800px; /* 桌機版最大寬度 */
+    margin: -20px auto 40px;
+    padding: 0 16px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Sections */
+.step-section, .result-section {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--gray-light);
+    padding-bottom: 10px;
+}
+
+.step-num {
+    background: var(--accent);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+h2 { font-size: 1.25rem; margin: 0; }
+
+/* Inputs */
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; font-size: 0.9rem; color: #4b5563; margin-bottom: 5px; }
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box; /* 確保 padding 不會撐大寬度 */
+}
+
+/* Room Selector (Cards) */
+.room-selector {
+    display: flex;
+    flex-direction: column; /* 手機版垂直堆疊 */
+    gap: 12px;
+}
+
+.room-card {
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+}
+
+.room-card:has(input:checked) {
+    border-color: var(--primary);
+    background-color: #eff6ff;
+}
+
+.card-content { margin-left: 10px; }
+.card-content h3 { margin: 0 0 5px 0; font-size: 1.1rem; }
+.price { color: var(--accent); font-weight: bold; margin: 0; }
+.features { font-size: 0.85rem; color: #6b7280; padding-left: 20px; margin: 5px 0 0 0; }
+
+/* Comparison Matrix (Grid) */
+.comparison-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.compare-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.compare-card.green-theme {
+    background-color: var(--green-bg);
+    border-color: var(--green);
+}
+
+.compare-card h4 { margin: 0 0 10px 0; font-size: 1rem; }
+
+.compare-card .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.val-current { text-decoration: line-through; color: #9ca3af; }
+.val-future { font-weight: bold; }
+.val-future.free { color: var(--green); font-size: 1.1rem; }
+
+.badge {
+    display: inline-block;
+    background: var(--green);
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+/* Summary Box */
+.final-summary {
+    background: #1f2937;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.diff-box {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #374151;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+/* Desktop Styles */
+@media (min-width: 768px) {
+    .room-selector {
+        flex-direction: row; /* 桌機版橫向排列 */
+    }
+    .room-card { flex: 1; }
+    
+    .comparison-grid {
+        grid-template-columns: repeat(3, 1fr); /* 桌機版三欄 */
+    }
+}
+/* style.css */
+
+/* 確保這個區塊有白色背景，不然截圖出來可能會變透明或變黑 */
+.result-section {
+    background: white; 
+    /* ...其他原本的樣式... */
+}
 /* =========================================
-   長輩友善閱讀優化 (Senior-Friendly UI)
+   長輩友善閱讀優化 V2 (特大字體與高對比)
    ========================================= */
 
-/* 1. 全局基礎字體加大與文字加深 */
+/* 1. 全局基礎字體再加大 */
 body {
-    font-size: 18px; 
-    color: #111827; /* 加深為極深灰近純黑 */
+    font-size: 20px; /* 從 18px 提升到 20px */
+    color: #111827;
 }
 
 /* 2. 輸入區塊優化：題目更明顯、輸入框字更大 */
 .input-group label {
-    font-size: 1.1rem;
-    font-weight: 600; 
-    color: #000000; /* 標題純黑 */
+    font-size: 1.25rem; /* 字體再加大 */
+    font-weight: 700; 
+    color: #000000; 
+    margin-bottom: 8px;
 }
 .input-group input {
-    font-size: 1.15rem; 
+    font-size: 1.25rem; /* 輸入框內的數字更大 */
+    padding: 14px;
     color: #000000;
     font-weight: bold;
 }
 .input-group small {
-    font-size: 1rem;
-    color: #374151; /* 原本太淺的灰色加深 */
-    font-weight: 500;
+    font-size: 1.1rem; /* 輔助說明文字加大 */
+    color: #374151; 
+    font-weight: 600;
 }
 
 /* 3. 對照卡片優化：重點數字與標題放大 */
 .card-content h3, .compare-card h4 {
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: 1.4rem; /* 卡片標題加大 */
+    font-weight: 800;
     color: #000000;
 }
 .price {
-    font-size: 1.25rem;
+    font-size: 1.35rem; /* 房租金額加大 */
 }
 .compare-card .row {
-    font-size: 1.15rem; /* 對照表內文字體加大 */
+    font-size: 1.25rem; /* 對照表內文字體加大 */
+    margin-bottom: 12px;
 }
 .compare-card .label {
-    font-weight: 600;
+    font-weight: 700;
     color: #111827;
 }
 .val-current {
-    color: #4b5563; /* 原本被劃線的數字若太淺，稍微加深避免看不見 */
-    font-weight: 500;
+    color: #4b5563; 
+    font-weight: 600;
+}
+.val-future {
+    font-size: 1.25rem;
 }
 .val-future.free {
-    font-size: 1.25rem;
-    font-weight: 800; /* 0元 字體特粗 */
+    font-size: 1.4rem; /* 0元 字體特粗最大 */
+    font-weight: 900;
 }
 
 /* 4. 徽章與備註加深放大 */
 .badge {
-    font-size: 1rem; /* 徽章標籤字體加大 */
+    font-size: 1.1rem; /* 徽章標籤字體加大 */
     font-weight: bold;
-    padding: 4px 10px;
+    padding: 6px 12px;
+    margin-top: 8px;
 }
 .note {
-    font-size: 1.05rem;
-    color: #111827; /* 備註小字加深 */
-    font-weight: 500;
+    font-size: 1.15rem;
+    color: #111827; 
+    font-weight: 600;
+    margin-top: 10px;
 }
 
 /* 5. 結算區塊特化 */
 .summary-row {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.4rem; /* 總額字體加大 */
+    font-weight: 700;
 }
 .diff-box {
-    font-size: 1.4rem; /* 差額結果字體最大化 */
+    font-size: 1.55rem; /* 差額結果字體最大化 */
+    padding-top: 18px;
+}
+
+/* 6. [新增] 條列式免責聲明排版 */
+.disclaimer-box {
+    margin-top: 20px;
+    text-align: left; /* 改為靠左對齊，方便閱讀條列 */
+    background-color: #f3f4f6;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border-left: 4px solid #9ca3af;
+}
+.disclaimer-box p {
+    font-size: 1.05rem;
+    color: #374151;
+    font-weight: 600;
+    margin: 5px 0;
+    line-height: 1.6;
 }

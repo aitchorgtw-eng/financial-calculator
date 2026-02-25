@@ -95,6 +95,18 @@
                         </ul>
                     </div>
                 </label>
+
+                <label class="room-card">
+                    <input type="radio" name="room" value="74000">
+                    <div class="card-content">
+                        <h3>舒適兩房一廳</h3>
+                        <p class="price">約 NT$74,000 /月</p>
+                        <ul class="features">
+                            <li>寬敞起居與客房空間</li>
+                            <li>適合夫妻或重視空間者</li>
+                        </ul>
+                    </div>
+                </label>
             </div>
 
             <div class="extras">
@@ -185,7 +197,7 @@
                         <span class="label">日昇月好</span>
                         <span class="val-future free">NT$ 0</span>
                     </div>
-                    <div class="badge">免費參加（僅特定課程、耗材及個別健身教練指導等需自付）</div>
+                    <div class="badge">免費參加（僅特定課程等需自付）</div>
                 </div>
 
                 <div class="compare-card green-theme">
@@ -221,7 +233,6 @@
                 <div class="capital-content">
                     <p>信託金額 (5年)：<span id="val_trust">-</span></p>
                     <p>保證金 (6個月)：<span id="val_deposit">-</span></p>
-                    <small>*此為預估值，實際依合約為主</small>
                 </div>
             </details>
 
@@ -229,7 +240,12 @@
 
         <div class="action-area">
             <button class="btn-primary" onclick="generateImage()">下載試算報告 (圖片版)</button>
-            <p class="disclaimer">本試算結果僅供參考，實際費用以正式報價單為準。</p>
+            
+            <div class="disclaimer-box">
+                <p>1) 本表所列的房型月租費為「暫定區間」，不代表最終定價。</p>
+                <p>2) 本試算結果僅供參考，實際費用將以本村正式公告與合約內容為準。</p>
+            </div>
+
         </div>
 
     </main>
