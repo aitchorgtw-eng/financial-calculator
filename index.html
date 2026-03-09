@@ -28,13 +28,13 @@
             </div>
 
             <div class="input-group">
-                <label>📄 居住成本1.4 房屋稅/地價稅 (請填寫年繳總金額)</label>
+                <label>📄 居住成本 (1.4 房屋稅/地價稅，請填寫年繳總金額)</label>
                 <input type="number" id="in_tax" placeholder="例如：12000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
                 <small style="color: #6b7280; font-size: 0.85rem; margin-top: 4px; display: block;">* 系統將自動除以 12，換算為每月平均開銷</small>
             </div>
             
             <div class="input-group">
-                <label>⚡ 公共事業與通訊費用 (2.1水費	2.2天然氣／瓦斯費	2.3垃圾清運費)</label>
+                <label>⚡ 公共事業與通訊費用 (2.1水費	2.2天然氣／瓦斯費	2.3垃圾清運費 2.4網路費)</label>
                 <input type="number" id="in_utilities" placeholder="例如：3500" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
             </div>
 
@@ -49,7 +49,7 @@
             </div>
 
             <div class="input-group">
-                <label>🍽️ 交通 4.1油資／路邊停車費	4.2大眾運輸／計程車	</label>
+                <label>🍽️ 交通 (4.1 油資 / 路邊停車費 4.2大眾運輸 / 計程車)	</label>
                 <input type="number" id="in_others" placeholder="例如：15000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
             </div>
             
@@ -59,7 +59,7 @@
             </div>
 
             <div class="input-group">
-                <label>🚨 智慧照護 (居家保全、緊急求救、跌倒偵測)</label>
+                <label>🚨 智慧安全系統 (居家保全、緊急求救、跌倒偵測)</label>
                 <input type="number" id="in_smart_care" placeholder="例如：2000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
             </div>
 
@@ -113,6 +113,9 @@
                 <label><input type="checkbox" id="check_partner" value="8000"> 配偶同住 (+8,000)</label>
                 <label><input type="checkbox" id="check_care" value="5000"> 需外籍看護同住 (+5,000)</label>
             </div>
+			 <div class="extras">
+			  <label> 「本表所列的房型月租費為「暫定區間平均值」，不代表最終定價。」</label>
+			 </div>
         </section>
 
         <section class="result-section" id="report-area">
@@ -136,7 +139,7 @@
                 </div>
 
                 <div class="compare-card green-theme">
-                    <h4>水費、保全與網路</h4>
+                    <h4>水費、天然氣/瓦斯、垃圾清運與網路</h4>
                     <div class="row">
                         <span class="label">目前居家</span>
                         <span class="val-current" id="out_util_cur">-</span>
@@ -197,7 +200,7 @@
                         <span class="label">日昇月好</span>
                         <span class="val-future free">NT$ 0</span>
                     </div>
-                    <div class="badge">免費參加（僅特定課程等需自付）</div>
+                    <div class="badge">免費參加（僅特定課程與耗材需自付）</div>
                 </div>
 
                 <div class="compare-card green-theme">
@@ -242,9 +245,8 @@
             <button class="btn-primary" onclick="generateImage()">下載試算報告 (圖片版)</button>
             
             <div class="disclaimer-box">
-                <p>1) 本表所列的房型月租費為「暫定區間」，不代表最終定價。</p>
+                <p>1) 本表所列的房型月租費為「暫定區間平均值」，不代表最終定價。</p>
                 <p>2) 本試算結果僅供參考，實際費用將以本村正式公告與合約內容為準。</p>
-				 <p>3) ※「暫定區間」這個說法，需要再依房租費用的呈現方式調整。</p>
             </div>
 
         </div>

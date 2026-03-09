@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         cleaning: document.getElementById('in_cleaning'),
         others: document.getElementById('in_others'), // 交通費
         electricity: document.getElementById('in_electricity'), // 電費
-        activities: document.getElementById('in_activities'), // [新增] 課程娛樂
-        smart_care: document.getElementById('in_smart_care')  // [新增] 智慧照護
+        activities: document.getElementById('in_activities'), // 課程娛樂
+        smart_care: document.getElementById('in_smart_care')  // 智慧照護
     };
     
     // 房型與加價選項
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ROOM_RANGES = {
         34500: { min: 33000, max: 36000 }, // 經濟房
         46000: { min: 42000, max: 50000 }, // 一房一廳
-        74000: { min: 70000, max: 78000 }  // 二房一廳 (預留)
+        74000: { min: 70000, max: 78000 }  // 二房一廳
     };
 
     // 2. 監聽所有輸入變更
@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
             cleaning: Number(inputs.cleaning.value) || 0,
             others: Number(inputs.others.value) || 0,      // 交通
             electricity: Number(inputs.electricity.value) || 0, // 電費
-            activities: Number(inputs.activities.value) || 0,   // [新增] 課程
-            smart_care: Number(inputs.smart_care.value) || 0    // [新增] 照護
+            activities: Number(inputs.activities.value) || 0,   // 課程
+            smart_care: Number(inputs.smart_care.value) || 0    // 照護
         };
         
         // 目前總開銷 (所有項目加總)
@@ -86,12 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const extraFee = (checkboxes.partner.checked ? Number(checkboxes.partner.value) : 0) + 
                          (checkboxes.care.checked ? Number(checkboxes.care.value) : 0);
         
-        // 月費試算 (中位數)
+        // 月費試算 (房租底價 + 額外加價)
         const futureHousing = baseRent + extraFee;
-
-        // 資金準備區間試算
-        const futureHousingMin = baseRentMin + extraFee;
-        const futureHousingMax = baseRentMax + extraFee;
 
         // C. 更新 UI 文字
         
@@ -108,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const elecDisplayCur = document.getElementById('out_elec_cur');
         if(elecDisplayCur) elecDisplayCur.textContent = `NT$ ${current.electricity.toLocaleString()}`;
 
-        // [新增] 課程與照護 (現況)
+        // 課程與照護 (現況)
         const actDisplay = document.getElementById('out_act_cur');
         if(actDisplay) actDisplay.textContent = `NT$ ${current.activities.toLocaleString()}`;
 
@@ -122,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(elecDisplayFut) elecDisplayFut.textContent = `NT$ ${current.electricity.toLocaleString()}`;
         
         // --- 總結算 ---
-        // 未來總開銷 = 房租 + 電費 (其他項目如交通、課程、照護皆為 $0 內含)
+        // 未來總開銷 = 房租(+加價) + 電費 (其他項目如交通、課程、照護皆為 $0 內含)
         const totalFuture = futureHousing + current.electricity; 
         
         document.getElementById('total_current').textContent = `NT$ ${Math.round(totalCurrent).toLocaleString()}`;
@@ -143,21 +139,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // --- 一次性資金 (區間顯示) ---
-        // 信託 (5年)
-        const trustMin = (futureHousingMin * 60 / 10000).toFixed(1);
-        const trustMax = (futureHousingMax * 60 / 10000).toFixed(1);
+        // --- [修正重點] 一次性資金 (區間顯示) ---
+        // 這裡不再使用含有加價(extraFee)的金額，只使用房型的純底價(baseRentMin / baseRentMax)來計算
+        
+        // 信託 (5年 = 60個月)
+        const trustMin = (baseRentMin * 60 / 10000).toFixed(1);
+        const trustMax = (baseRentMax * 60 / 10000).toFixed(1);
         
         // 保證金 (6個月)
-        const depositMin = (futureHousingMin * 6 / 10000).toFixed(1);
-        const depositMax = (futureHousingMax * 6 / 10000).toFixed(1);
+        const depositMin = (baseRentMin * 6 / 10000).toFixed(1);
+        const depositMax = (baseRentMax * 6 / 10000).toFixed(1);
 
         document.getElementById('val_trust').textContent = `${trustMin} ~ ${trustMax} 萬`;
         document.getElementById('val_deposit').textContent = `${depositMin} ~ ${depositMax} 萬`;
     }
 });
 
-// 4. 生成圖片功能 (維持不變)
+// 4. 生成圖片功能
 function generateImage() {
     if (typeof html2canvas === 'undefined') {
         alert("⚠️ 錯誤：無法啟動截圖工具。\n請確認網路連線是否正常。");
