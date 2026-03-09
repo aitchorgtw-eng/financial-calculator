@@ -1,11 +1,11 @@
 :root {
-    /* [修改] 表頭藍色改為 Pantone 16-4132 TCX Little Boy Blue */
-    --primary: #6CA0DC; 
+    /* [修改] 表頭主色改為 #5E7AB6 */
+    --primary: #5E7AB6; 
     --accent: #f97316;
-    /* [修改] 原本的綠色改為 Little Boy Blue */
-    --green: #6CA0DC; 
-    /* [修改] 原本的淡綠色背景改為極淡的藍色，搭配主色 */
-    --green-bg: #F0F6FA; 
+    /* [修改] 原本的綠色改為 #5E7AB6 */
+    --green: #5E7AB6; 
+    /* [修改] 淡色背景配合主色微調為柔和的淡灰藍色 */
+    --green-bg: #F0F4F8; 
     --gray-light: #f3f4f6;
     --text-main: #1f2937;
 }
@@ -76,13 +76,13 @@ h2 { font-size: 1.25rem; margin: 0; }
     border: 1px solid #d1d5db;
     border-radius: 8px;
     font-size: 1rem;
-    box-sizing: border-box; /* 確保 padding 不會撐大寬度 */
+    box-sizing: border-box; 
 }
 
 /* Room Selector (Cards) */
 .room-selector {
     display: flex;
-    flex-direction: column; /* 手機版垂直堆疊 */
+    flex-direction: column; 
     gap: 12px;
 }
 
@@ -148,14 +148,13 @@ h2 { font-size: 1.25rem; margin: 0; }
 
 /* Summary Box */
 .final-summary {
-    /* [修改] 結算區域背景改為 Pantone 16-4132 TCX Little Boy Blue */
     background: var(--primary);
     color: white;
     padding: 20px;
     border-radius: 12px;
     margin-top: 20px;
-    /* 加入一點陰影讓質感更好 */
-    box-shadow: 0 8px 15px rgba(108, 160, 220, 0.4); 
+    /* [修改] 陰影顏色配合 #5E7AB6 (rgb: 94, 122, 182) */
+    box-shadow: 0 8px 15px rgba(94, 122, 182, 0.4); 
 }
 
 .summary-row {
@@ -166,7 +165,6 @@ h2 { font-size: 1.25rem; margin: 0; }
 
 .diff-box {
     margin-top: 15px;
-    /* [新增] 加上白底，讓 JS 的橘色或綠色文字在藍色背景中依然清晰可見 */
     background-color: #ffffff; 
     padding: 15px;
     border-radius: 8px;
@@ -179,15 +177,14 @@ h2 { font-size: 1.25rem; margin: 0; }
 /* Desktop Styles */
 @media (min-width: 768px) {
     .room-selector {
-        flex-direction: row; /* 桌機版橫向排列 */
+        flex-direction: row; 
     }
     .room-card { flex: 1; }
     
     .comparison-grid {
-        grid-template-columns: repeat(3, 1fr); /* 桌機版三欄 */
+        grid-template-columns: repeat(3, 1fr); 
     }
 }
-/* style.css */
 
 /* 確保這個區塊有白色背景，不然截圖出來可能會變透明或變黑 */
 .result-section {
@@ -282,7 +279,7 @@ body {
     background-color: #f3f4f6;
     padding: 15px 20px;
     border-radius: 8px;
-    border-left: 4px solid var(--primary); /* 左側邊線也配合改成 Little Boy Blue */
+    border-left: 4px solid var(--primary); /* 邊線配合改成 #5E7AB6 */
 }
 .disclaimer-box p {
     font-size: 1.05rem;
