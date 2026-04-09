@@ -1,343 +1,259 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>圖片轉文字與智慧語音閱讀器</title>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    <style>
-        body { font-family: "Microsoft JhengHei", sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f5f5f5; line-height: 1.6; }
-        .container { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .upload-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-        #paste-area { border: 2px dashed #ccc; padding: 20px; text-align: center; color: #666; border-radius: 8px; background-color: #fafafa; }
-        .upload-btn { display: inline-block; padding: 12px 20px; background-color: #28a745; color: white; text-align: center; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        #file-upload { display: none; }
-        
-        /* 升級：多張圖片預覽區的排版 */
-        #preview-container { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 10px; 
-            margin-top: 15px; 
-            justify-content: center; 
-        }
-        .preview-img { 
-            max-width: 120px; 
-            max-height: 120px; 
-            object-fit: contain; 
-            border: 1px solid #ddd; 
-            border-radius: 4px; 
-            background-color: white;
-            padding: 2px;
-        }
-
-        #status { color: #d9534f; font-weight: bold; margin-bottom: 15px; text-align: center;}
-        
-        .controls { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 15px; 
-            align-items: center; 
-            background-color: #f8f9fa; 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin-bottom: 20px;
-            position: sticky; 
-            top: 10px; 
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border: 1px solid #e0e0e0;
-        }
-        .settings-group { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
-        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;}
-        button:hover { background-color: #0056b3; }
-        .stop-btn { background-color: #dc3545; }
-
-        textarea { 
-            width: 100%; 
-            height: 200px; 
-            max-height: 50vh; 
-            overflow-y: auto; 
-            padding: 15px; 
-            box-sizing: border-box; 
-            border: 1px solid #ccc; 
-            border-radius: 4px; 
-            resize: vertical; 
-            font-size: 16px; 
-            margin-bottom: 10px; 
-        }
-        #reading-area { 
-            display: none; 
-            padding: 15px; 
-            background-color: #fffde7; 
-            border-left: 4px solid #ffc107; 
-            border-radius: 4px; 
-            margin-bottom: 15px; 
-            font-size: 18px; 
-            max-height: 55vh; 
-            overflow-y: auto; 
-            scroll-behavior: smooth; 
-        }
-        
-        .text-chunk { cursor: pointer; transition: background-color 0.2s; border-radius: 3px; }
-        .text-chunk:hover { background-color: #e0e0e0; }
-        .highlight { background-color: #ffeb3b; font-weight: bold; color: #d32f2f; }
-    </style>
+    <title>日昇月好海岸村 | 退休生活財務試算</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    <h2>📖 智慧文字閱讀器</h2>
-    
-    <div class="upload-section">
-        <label for="file-upload" class="upload-btn">📁 選擇多張圖片 (建議 1~5 張,最多5張)</label>
-        <input type="file" id="file-upload" accept="image/*" multiple>
-        <div id="paste-area">
-            電腦版也可直接 <strong>Ctrl + V</strong> 貼上圖片
-            <div id="preview-container"></div>
-        </div>
-    </div>
+    <header class="site-header">
+        <div class="logo">日昇月好海岸村</div>
+        <h1>退休生活財務試算</h1>
+        <p>3分鐘試算，發現「租金內含」的真實價值</p>
+    </header>
 
-    <div id="status"></div>
-
-    <div class="controls">
-        <div class="settings-group">
-            <label for="rate-slider"><strong>語速：</strong></label>
-            <input type="range" id="rate-slider" min="0.5" max="2.0" step="0.1" value="1.0">
-            <span id="rate-value">1.0x</span>
-        </div>
-        <div class="btn-group">
-            <button id="speak-btn" onclick="toggleSpeak()">🔊 開始導讀</button>
-            <button onclick="stopSpeaking()" class="stop-btn">⏹️ 停止</button>
-        </div>
-        <div style="width: 100%; font-size: 14px; color: #666; margin-top: 5px;">
-            💡 提示：導讀開始後，可直接點擊下方文字跳段播放。
-        </div>
-    </div>
-
-    <h3>📝 文字內容：</h3>
-    <textarea id="result-text" placeholder="辨識結果會拼接在這裡，也可手動修改..."></textarea>
-    
-    <div id="reading-area"></div>
-
-</div>
-
-<script>
-    const resultText = document.getElementById('result-text');
-    const readingArea = document.getElementById('reading-area');
-    const statusMsg = document.getElementById('status');
-    const rateSlider = document.getElementById('rate-slider');
-    const speakBtn = document.getElementById('speak-btn');
-    const previewContainer = document.getElementById('preview-container');
-    
-    let isSpeaking = false; 
-    let chunks = [];
-    let currentChunkIndex = 0;
-    let wakeLock = null; 
-
-    async function requestWakeLock() {
-        try {
-            if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen');
-        } catch (err) { console.log('螢幕防休眠未啟用:', err); }
-    }
-    function releaseWakeLock() {
-        if (wakeLock !== null) wakeLock.release().then(() => wakeLock = null);
-    }
-
-    rateSlider.addEventListener('input', (e) => { document.getElementById('rate-value').innerText = e.target.value + 'x'; });
-
-    function renderReadingArea(text) {
-        readingArea.innerHTML = '';
-        chunks = text.match(/[^。！？\n]+[。！？\n]*/g) || [text];
+    <main class="calculator-container">
         
-        chunks.forEach((chunk, index) => {
-            if(chunk.trim() === '') return;
-            let span = document.createElement('span');
-            span.innerText = chunk;
-            span.className = 'text-chunk';
-            span.id = 'chunk-' + index;
-            span.onclick = () => jumpToPlay(index);
-            readingArea.appendChild(span);
-        });
-        
-        readingArea.style.display = 'block';
-        resultText.style.display = 'none'; 
-    }
+        <section class="step-section" id="step1">
+            <div class="section-title">
+                <span class="step-num">1</span>
+                <h2>您目前的每月居家開銷</h2>
+            </div>
+            
+            <div class="input-group">
+                <label>🏠 居住成本 (1.1貸款或房租	1.2大樓管理費與停車費	1.3房屋修繕)</label>
+                <input type="number" id="in_housing" placeholder="例如：25000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
 
-    function highlightChunk(index) {
-        document.querySelectorAll('.text-chunk').forEach(el => el.classList.remove('highlight'));
-        const currentEl = document.getElementById('chunk-' + index);
-        if (currentEl) {
-            currentEl.classList.add('highlight');
-            readingArea.scrollTo({
-                top: currentEl.offsetTop - readingArea.offsetTop - 50,
-                behavior: 'smooth'
-            });
-        }
-    }
+            <div class="input-group">
+                <label>📄 居住成本 (1.4 房屋稅/地價稅，請填寫年繳總金額)</label>
+                <input type="number" id="in_tax" placeholder="例如：12000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+                <small style="color: #6b7280; font-size: 0.85rem; margin-top: 4px; display: block;">* 系統將自動除以 12，換算為每月平均開銷</small>
+            </div>
+            
+            <div class="input-group">
+                <label>⚡ 公共事業與通訊費用 (2.1水費	2.2天然氣／瓦斯費	2.3垃圾清運費 2.4網路費)</label>
+                <input type="number" id="in_utilities" placeholder="例如：3500" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
 
-    function jumpToPlay(index) {
-        window.speechSynthesis.cancel(); 
-        currentChunkIndex = index;
-        isSpeaking = true;
-        speakBtn.innerText = `⏸️ 暫停`;
-        speakBtn.style.backgroundColor = '#ffc107';
-        speakBtn.style.color = 'black';
-        speakNextChunk();
-    }
+            <div class="input-group">
+                <label>💡 居家電費 (夏季/非夏季平均)</label>
+                <input type="number" id="in_electricity" placeholder="例如：1500" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
 
-    function toggleSpeak() {
-        const text = resultText.value.trim();
-        if (!text) { alert('沒有文字！請先貼上文章或辨識圖片。'); return; }
+            <div class="input-group">
+                <label>🧹 居家清潔/家事服務</label>
+                <input type="number" id="in_cleaning" placeholder="例如：2000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
 
-        if (isSpeaking) {
-            window.speechSynthesis.cancel();
-            isSpeaking = false;
-            releaseWakeLock();
-            speakBtn.innerText = `▶️ 繼續播放`;
-            speakBtn.style.backgroundColor = '#28a745';
-            speakBtn.style.color = 'white';
-            statusMsg.innerText = '⏸️ 語音已暫停';
-            return;
-        }
+            <div class="input-group">
+                <label>🍽️ 交通 (4.1 油資 / 路邊停車費 4.2大眾運輸 / 計程車)	</label>
+                <input type="number" id="in_others" placeholder="例如：15000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
+            
+            <div class="input-group">
+                <label>🎨 課程/運動/社團/娛樂 (健身房、才藝課學費)</label>
+                <input type="number" id="in_activities" placeholder="例如：3000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
 
-        requestWakeLock();
-        isSpeaking = true;
-        speakBtn.innerText = `⏸️ 暫停`;
-        speakBtn.style.backgroundColor = '#ffc107';
-        speakBtn.style.color = 'black';
-        statusMsg.innerText = '🔊 正在為您朗讀...';
+            <div class="input-group">
+                <label>🚨 智慧安全系統 (居家保全、緊急求救、跌倒偵測)</label>
+                <input type="number" id="in_smart_care" placeholder="例如：2000" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            </div>
 
-        if (currentChunkIndex === 0 || currentChunkIndex >= chunks.length) {
-            renderReadingArea(text);
-            currentChunkIndex = 0;
-        }
-        
-        speakNextChunk();
-    }
+        </section>
 
-    function speakNextChunk() {
-        if (!isSpeaking || currentChunkIndex >= chunks.length) {
-            if(currentChunkIndex >= chunks.length && chunks.length > 0) {
-                stopSpeaking();
-                statusMsg.style.color = 'green';
-                statusMsg.innerText = '✅ 朗讀完畢。';
-            }
-            return;
-        }
+        <section class="step-section" id="step2">
+            <div class="section-title">
+                <span class="step-num">2</span>
+                <h2>選擇未來理想房型</h2>
+            </div>
+            
+            <div class="room-selector">
+                <label class="room-card">
+                    <input type="radio" name="room" value="34500" checked>
+                    <div class="card-content">
+                        <h3>經濟舒適房</h3>
+                        <p class="price">約 NT$34,500 /月</p>
+                        <ul class="features">
+                            <li>適合極簡生活</li>
+                            <li>包含完整公設使用權</li>
+                        </ul>
+                    </div>
+                </label>
 
-        highlightChunk(currentChunkIndex);
-        
-        const utterance = new SpeechSynthesisUtterance(chunks[currentChunkIndex]);
-        utterance.lang = 'zh-TW'; 
-        utterance.rate = parseFloat(rateSlider.value); 
+                <label class="room-card">
+                    <input type="radio" name="room" value="46000">
+                    <div class="card-content">
+                        <h3>經典一房一廳</h3>
+                        <p class="price">約 NT$46,000 /月</p>
+                        <ul class="features">
+                            <li>獨立臥室與客廳</li>
+                            <li>最受歡迎選擇</li>
+                        </ul>
+                    </div>
+                </label>
 
-        utterance.onend = function() {
-            currentChunkIndex++;
-            speakNextChunk();
-        };
+                <label class="room-card">
+                    <input type="radio" name="room" value="74000">
+                    <div class="card-content">
+                        <h3>舒適兩房一廳</h3>
+                        <p class="price">約 NT$74,000 /月</p>
+                        <ul class="features">
+                            <li>寬敞起居與客房空間</li>
+                            <li>適合夫妻或重視空間者</li>
+                        </ul>
+                    </div>
+                </label>
+            </div>
 
-        utterance.onerror = function(e) {
-            if (e.error !== 'canceled' && e.error !== 'interrupted') {
-                currentChunkIndex++;
-                speakNextChunk();
-            }
-        };
+            <div class="extras">
+                <label><input type="checkbox" id="check_partner" value="8000"> 配偶同住 (+8,000)</label>
+                <label><input type="checkbox" id="check_care" value="5000"> 需外籍看護同住 (+5,000)</label>
+            </div>
+			 <div class="extras">
+			  <label> 本表所列的房型月租費為「暫定區間平均值」，不代表最終定價。</label>
+			 </div>
+        </section>
 
-        window.speechSynthesis.speak(utterance);
-    }
+        <section class="result-section" id="report-area">
+            <div class="section-title">
+                <span class="step-num">3</span>
+                <h2>費用對照表</h2>
+            </div>
 
-    function stopSpeaking() {
-        isSpeaking = false; 
-        currentChunkIndex = 0;
-        releaseWakeLock();
-        window.speechSynthesis.cancel(); 
-        document.querySelectorAll('.text-chunk').forEach(el => el.classList.remove('highlight'));
-        
-        speakBtn.innerText = '🔊 開始導讀';
-        speakBtn.style.backgroundColor = '#007bff';
-        speakBtn.style.color = 'white';
-        statusMsg.style.color = '#d9534f';
-        statusMsg.innerText = '';
-        
-        readingArea.style.display = 'none';
-        resultText.style.display = 'block'; 
-    }
+            <div class="comparison-grid">
+                <div class="compare-card">
+                    <h4>居住與設施</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_housing_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future" id="out_housing_fut">-</span>
+                    </div>
+                    <div class="note">含租金、原附設備修繕、管理、房屋稅/地價稅</div>
+                </div>
 
-    // --- 升級：多圖辨識邏輯 ---
-    document.getElementById('file-upload').addEventListener('change', (e) => {
-        // 將選擇的檔案轉為陣列，並限制最多 5 張（保護手機記憶體）
-        const files = Array.from(e.target.files).slice(0, 5);
-        if (files.length > 0) handleMultipleImages(files);
-    });
+                <div class="compare-card green-theme">
+                    <h4>水費、天然氣/瓦斯、垃圾清運與網路</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_util_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">租金已內含 (Included)</div>
+                </div>
 
-    window.addEventListener('paste', (e) => {
-        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-        const files = [];
-        for (let item of items) {
-            if (item.type.indexOf('image') !== -1) {
-                files.push(item.getAsFile());
-            }
-        }
-        if (files.length > 0) handleMultipleImages(files.slice(0, 5));
-    });
+                <div class="compare-card green-theme">
+                    <h4>基本居家清潔（每月一次）</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_clean_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">免費服務 (Included)</div>
+                </div>
 
-    async function handleMultipleImages(files) {
-        // 清空前一次的預覽圖與文字
-        previewContainer.innerHTML = '';
-        resultText.value = '';
-        stopSpeaking(); // 確保語音停止
+                <div class="compare-card">
+                    <h4>居家電費 (依錶計費)</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_elec_cur">-</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future" id="out_elec_fut">-</span>
+                    </div>
+                    <div class="note">皆為個人自付 (依實際用量)</div>
+                </div>
 
-        // 顯示所有選擇的圖片預覽
-        files.forEach(file => {
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.className = 'preview-img';
-            previewContainer.appendChild(img);
-        });
-
-        // 進入批次辨識
-        await recognizeMultipleTexts(files);
-    }
-
-    async function recognizeMultipleTexts(files) {
-        statusMsg.style.color = '#007bff';
-        statusMsg.innerText = `⏳ 準備載入引擎，共需辨識 ${files.length} 張圖片...`;
-        
-        try {
-            // 共用同一個 AI 引擎 (大幅提升多圖處理速度)
-            const worker = await Tesseract.createWorker('chi_tra+eng');
-            let combinedText = '';
-
-            // 依序處理每一張圖
-            for (let i = 0; i < files.length; i++) {
-                statusMsg.innerText = `⏳ 正在辨識第 ${i + 1} / ${files.length} 張圖片中...`;
-                const ret = await worker.recognize(files[i]);
-                const text = ret.data.text.trim();
+                <div class="compare-card green-theme">
+                    <h4>交通 (油資/稅金/大眾運輸)</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_traffic_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">定時定點免費接駁服務已內含（Included）</div>
+                </div>
                 
-                if (text) {
-                    // 將新辨識出的文字加上換行，接在原有文字後面
-                    combinedText += text + '\n\n';
-                    resultText.value = combinedText; 
-                }
-            }
+                <div class="compare-card green-theme">
+                    <h4>課程/運動/社團/娛樂</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_act_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">免費參加（僅特定課程與耗材需自付）</div>
+                </div>
+
+                <div class="compare-card green-theme">
+                    <h4>智慧安全系統</h4>
+                    <div class="row">
+                        <span class="label">目前居家</span>
+                        <span class="val-current" id="out_care_cur">-</span>
+                    </div>
+                    <div class="row highlight">
+                        <span class="label">日昇月好</span>
+                        <span class="val-future free">NT$ 0</span>
+                    </div>
+                    <div class="badge">租金已內含 (Included)</div>
+                </div>
+            </div>
+
+            <div class="final-summary">
+                <div class="summary-row">
+                    <span>目前總開銷：</span>
+                    <span id="total_current">NT$ 0</span>
+                </div>
+                <div class="summary-row future">
+                    <span>入住後月費：</span>
+                    <span id="total_future">NT$ 0</span>
+                </div>
+                <div class="diff-box" id="diff_box">
+                    差額計算中...
+                </div>
+            </div>
+
+            <details class="capital-details" open>
+                <summary>查看一次性資金準備 (信託與保證金)</summary>
+                <div class="capital-content">
+                    <p>信託金額 (5年)：<span id="val_trust">-</span></p>
+                    <p>保證金 (6個月)：<span id="val_deposit">-</span></p>
+                </div>
+            </details>
+
+        </section>
+
+        <div class="action-area">
+            <button class="btn-primary" onclick="generateImage()">下載試算報告 (圖片版)</button>  <small style="color: #6b7280; font-size: 0.85rem; margin-top: 4px; display: block;">* 電腦版可直接下載；手機用戶若需下載圖片，請務必改用預設瀏覽器操作。</small>
             
-            // 全部處理完畢後才關閉引擎
-            await worker.terminate();
-            
-            if(combinedText.trim() === '') {
-                statusMsg.style.color = '#d9534f';
-                statusMsg.innerText = '⚠️ 圖片中找不到任何文字';
-            } else {
-                statusMsg.style.color = 'green';
-                statusMsg.innerText = `✅ ${files.length} 張圖片辨識完成！可點擊開始導讀。`;
-            }
-        } catch (error) {
-            console.error(error);
-            statusMsg.style.color = '#d9534f';
-            statusMsg.innerText = '❌ 辨識過程發生錯誤，請重新整理網頁再試。';
-        }
-    }
-</script>
+            <div class="disclaimer-box">
+                <p>1) 本表所列的房型月租費為「暫定區間平均值」，不代表最終定價。</p>
+                <p>2) 本試算結果僅供參考，實際費用將以本村正式公告與合約內容為準。</p>
+            </div>
+
+        </div>
+
+    </main>
+<script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.js"></script>
+<script src="script.js"></script>
+
 </body>
 </html>
